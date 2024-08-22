@@ -12,4 +12,6 @@ jobs:
       - name: Restore packages
         run: dotnet restore
       - name: Build
+        run: dotnet build src/Host/Host.csproj --configuration Release --no-restore --no-cache --output ./publish
+      - name: Pack to docker
         run: docker build -f "Dockerfile" . --progress plain --tag torrentwatcher:latest
