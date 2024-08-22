@@ -1,0 +1,13 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+RUN dotnet tool update --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+WORKDIR /src
+COPY . .
+RUN dotnet restore src/Host/Host.csproj --configfile Nuget.Config
+COPY . .
+RUN dotnet build src/Host/Host.csproj 
+COPY . .
+RUN chmod +x ./ef-migrations-update-database.sh
+CMD [ "sh", "ef-migrations-update-database.sh" ]

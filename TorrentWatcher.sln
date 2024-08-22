@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{57E63AB2-E7FA-4C7E-8A10-C975833987BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{70FEC179-6C70-4ABC-A86E-0A6A55087B15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "src\Contracts\Contracts.csproj", "{30E1AF5D-C93D-4A2C-BB99-557C1D63AF31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D6B23744-2CE9-47AE-816B-E5DDAD5B1370}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Engine", "test\Test.Engine\Test.Engine.csproj", "{F816B760-DAC9-4775-99DD-5A32FD4EB59E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "src\Host\Host.csproj", "{4A2D3B42-8500-464E-A0FC-09B0B69AC9C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandApi", "src\CommandApi\CommandApi.csproj", "{C032312E-D3C5-4285-8841-DF629771D3D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramClient", "src\TelegramClient\TelegramClient.csproj", "{D7F93ABE-EE47-4158-9EA2-613F5AF08F39}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "artifacts", "artifacts", "{D73DEFE2-AB1E-4727-8959-D0AA7477B0CE}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		Dockerfile-Migrate = Dockerfile-Migrate
+		ef-migrations-update-database.sh = ef-migrations-update-database.sh
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{70FEC179-6C70-4ABC-A86E-0A6A55087B15} = {57E63AB2-E7FA-4C7E-8A10-C975833987BE}
+		{30E1AF5D-C93D-4A2C-BB99-557C1D63AF31} = {57E63AB2-E7FA-4C7E-8A10-C975833987BE}
+		{F816B760-DAC9-4775-99DD-5A32FD4EB59E} = {D6B23744-2CE9-47AE-816B-E5DDAD5B1370}
+		{4A2D3B42-8500-464E-A0FC-09B0B69AC9C5} = {57E63AB2-E7FA-4C7E-8A10-C975833987BE}
+		{C032312E-D3C5-4285-8841-DF629771D3D4} = {57E63AB2-E7FA-4C7E-8A10-C975833987BE}
+		{D7F93ABE-EE47-4158-9EA2-613F5AF08F39} = {57E63AB2-E7FA-4C7E-8A10-C975833987BE}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70FEC179-6C70-4ABC-A86E-0A6A55087B15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70FEC179-6C70-4ABC-A86E-0A6A55087B15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70FEC179-6C70-4ABC-A86E-0A6A55087B15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70FEC179-6C70-4ABC-A86E-0A6A55087B15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30E1AF5D-C93D-4A2C-BB99-557C1D63AF31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30E1AF5D-C93D-4A2C-BB99-557C1D63AF31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30E1AF5D-C93D-4A2C-BB99-557C1D63AF31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30E1AF5D-C93D-4A2C-BB99-557C1D63AF31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F816B760-DAC9-4775-99DD-5A32FD4EB59E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F816B760-DAC9-4775-99DD-5A32FD4EB59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F816B760-DAC9-4775-99DD-5A32FD4EB59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F816B760-DAC9-4775-99DD-5A32FD4EB59E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A2D3B42-8500-464E-A0FC-09B0B69AC9C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A2D3B42-8500-464E-A0FC-09B0B69AC9C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A2D3B42-8500-464E-A0FC-09B0B69AC9C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A2D3B42-8500-464E-A0FC-09B0B69AC9C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C032312E-D3C5-4285-8841-DF629771D3D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C032312E-D3C5-4285-8841-DF629771D3D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C032312E-D3C5-4285-8841-DF629771D3D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C032312E-D3C5-4285-8841-DF629771D3D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F93ABE-EE47-4158-9EA2-613F5AF08F39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F93ABE-EE47-4158-9EA2-613F5AF08F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F93ABE-EE47-4158-9EA2-613F5AF08F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F93ABE-EE47-4158-9EA2-613F5AF08F39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
