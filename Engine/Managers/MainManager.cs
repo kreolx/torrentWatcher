@@ -68,13 +68,22 @@ internal sealed class MainManager : IMainManager
     public async Task PublishPostsAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Processing public posts.");
-        var postDto = await _postManager.GetNotPublishedPostAsync(cancellationToken);
-        if (postDto is not null)
+        int i = 0;
+        do
         {
-            if (await _telegramClient.SendMessageAsync(postDto.ImageUrl, postDto.ToString(), cancellationToken))
+            var postDto = await _postManager.GetNotPublishedPostAsync(cancellationToken);
+            if (postDto is not null)
             {
-                await _postManager.SetPublishedPostAsync(postDto.Id, cancellationToken);
+                if (await _telegramClient.SendMessageAsync(postDto.ImageUrl, postDto.ToString(), cancellationToken))
+                {
+                    await _postManager.SetPublishedPostAsync(postDto.Id, cancellationToken);
+                }
             }
-        }
+            else
+            {
+                break;
+            }
+            i++;
+        } while (i < 10);
     }
 }

@@ -18,9 +18,16 @@ internal sealed class PublishHostedService : BackgroundService
         using var timer = new PeriodicTimer(TimeSpan.FromMinutes(1));
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
-            var scope = _serviceProvider.CreateScope();
-            var mainManager = scope.ServiceProvider.GetRequiredService<IMainManager>();
-            await mainManager.PublishPostsAsync(stoppingToken);
+            try
+            {
+                var scope = _serviceProvider.CreateScope();
+                var mainManager = scope.ServiceProvider.GetRequiredService<IMainManager>();
+                await mainManager.PublishPostsAsync(stoppingToken);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }
