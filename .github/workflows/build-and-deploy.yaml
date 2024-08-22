@@ -1,0 +1,14 @@
+name: "Build and Deploy"
+on:
+  push:
+    branches:
+      - master
+jobs:
+  buid:
+    name: Build
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Restore packages
+        run: dotnet restore
