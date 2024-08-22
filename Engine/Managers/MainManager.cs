@@ -44,7 +44,7 @@ internal sealed class MainManager : IMainManager
                 var parser = _feedParserManagers.First(x => x.Source == feedSetting.Source);
                 var pageParser = _pageParsers.First(x => x.Source == feedSetting.Source);
                 var posts = parser.ParseFeed(feed);
-                var postsArray = posts.ToArray().Take(10).ToArray();
+                var postsArray = posts.ToArray();
                 _logger.LogInformation("Parsed {0} posts.", postsArray.Length);
                 var fullPost = new PostDto[postsArray.Length];
                 if (posts!.Any())
