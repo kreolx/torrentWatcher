@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "artifacts", "artifacts", "{
 		Dockerfile-Migrate = Dockerfile-Migrate
 		ef-migrations-update-database.sh = ef-migrations-update-database.sh
 		.github\workflows\build-and-deploy.yaml = .github\workflows\build-and-deploy.yaml
+		.github\workflows\deploy.yaml = .github\workflows\deploy.yaml
+		.github\workflows\migrate.yaml = .github\workflows\migrate.yaml
 	EndProjectSection
 EndProject
 Global

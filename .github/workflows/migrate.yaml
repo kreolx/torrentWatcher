@@ -1,0 +1,16 @@
+name: "Build and Deploy"
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    name: Migrate
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Migrate
+        run: docker build -f "Dockerfile-Migrate" . --progress plain --tag torrentwatchermigrate:latest
+      - name: Delete Migrate Container
+        run: docker rm -f torrentwatcher-migrate || true
+      - name: Run migrations
+        run: docker run --name=torrentwatcher-migrate --network=database --env "ConnectionStrings__postgresConnection"=${{secrets.CONNECTION_STRING}} torrentwatchermigrate:latest

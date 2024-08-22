@@ -1,0 +1,18 @@
+name: "Build and Deploy"
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    
+
+jobs:
+  build:
+    name: Build
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Delete old containers
+        run: docker rm -f torrentwatcher || true
+      - name: Deploy
+        run: docker run --name=torrentwatcher --network=database --env "TelegramSettings__Token"=${{secrets.TOKEN}} --env "TelegramSettings__ChatId"=${{secrets.CHAT_ID}} --env "ConnectionStrings__postgresConnection"=${{secrets.CONNECTION_STRING}} torrentwatcher:latest
