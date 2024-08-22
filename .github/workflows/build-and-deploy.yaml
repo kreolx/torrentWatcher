@@ -17,5 +17,7 @@ jobs:
         run: docker build -f "Dockerfile" . --progress plain --tag torrentwatcher:latest
       - name: Build Migrate
         run: docker build -f "Dockerfile-Migrate" . --progress plain --tag torrentwatchermigrate:latest
+      - name: Delete Migrate Container
+        run: docker rm -f torrentwatcher-migrate || true
       - name: Run migrations
         run: docker run --name=torrentwatcher-migrate --env "ConnectionStrings__postgresConnection"=${{secrets.CONNECTION_STRING}} torrentwatchermigrate:latest
