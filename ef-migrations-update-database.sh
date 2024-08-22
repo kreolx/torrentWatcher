@@ -1,6 +1,5 @@
 #!/bin/sh
 
 dotnet ef --version
-dotnet ef database update --verbose --project $CSPROJ --context JobDbContext
-dotnet ef database update --verbose --project $CSPROJ --context JobRangeContext --no-build
+dotnet ef database update --verbose --project src/Host/Host.csproj --context ApplicationDbContext
 
