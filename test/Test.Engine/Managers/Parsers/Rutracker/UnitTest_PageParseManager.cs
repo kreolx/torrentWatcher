@@ -2,6 +2,7 @@
 using Engine.Managers.Parsers.Rutracker;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 
 namespace Test.Engine.Managers.Parsers.Rutracker;
 
@@ -18,8 +19,9 @@ public class UnitTest_PageParseManager
 	    A.CallTo(handler).WithReturnType<Task<HttpResponseMessage>>().Returns(resp);
 	    var client = new HttpClient(handler);
         var factory = A.Fake<IHttpClientFactory>();
+        var logger = A.Fake<ILogger<PageParserManager>>();
         A.CallTo(() => factory.CreateClient(A<string>._)).Returns(client);
-		var manager = new PageParserManager(factory);
+		var manager = new PageParserManager(factory, logger);
 		var postDto = new PostDto("123", "","http://123.ru/forum/viewtopic.php?t=6257950", "", 0);
 		var resultDto = await manager.LoadDataAsync(postDto, default);
 		resultDto.Description.Should().NotBeEmpty();
