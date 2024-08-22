@@ -12,4 +12,4 @@ jobs:
       - name: Restore packages
         run: dotnet restore
       - name: Build
-        run: docker build -f Dockerfile -t ${IMAGE_NAME}
+        run: docker build -t TorrentWatcher -f Dockerfile 
