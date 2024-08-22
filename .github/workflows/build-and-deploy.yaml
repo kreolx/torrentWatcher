@@ -14,4 +14,4 @@ jobs:
         run: dotnet restore
       
       - name: Build
-        run: dotnet publish src/Host/Host.csproj --configuration release --no-self-contained --framework net8.0 --output ./publish --runtime linux-x64 /nodereuse:false
+        run: docker build -f Dockerfile -t ${IMAGE_NAME}
