@@ -20,4 +20,4 @@ jobs:
       - name: Delete Migrate Container
         run: docker rm -f torrentwatcher-migrate || true
       - name: Run migrations
-        run: docker run --name=torrentwatcher-migrate --network=database--env "ConnectionStrings__postgresConnection"=${{secrets.CONNECTION_STRING}} torrentwatchermigrate:latest
+        run: docker run --name=torrentwatcher-migrate --network=database --env "ConnectionStrings__postgresConnection"=${{secrets.CONNECTION_STRING}} torrentwatchermigrate:latest
