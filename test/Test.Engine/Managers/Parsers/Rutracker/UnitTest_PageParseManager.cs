@@ -1,4 +1,5 @@
-﻿using Contracts.Models;
+﻿using Contracts.Interfaces;
+using Contracts.Models;
 using Engine.Managers.Parsers.Rutracker;
 using FakeItEasy;
 using FluentAssertions;
@@ -11,17 +12,11 @@ public class UnitTest_PageParseManager
     [Fact]
     public async Task LoadData_should_return_correct_data()
     {
-	    using var resp = new HttpResponseMessage
-	    {
-		    Content = new StringContent(GetPage())
-	    };
-	    var handler = A.Fake<HttpMessageHandler>();
-	    A.CallTo(handler).WithReturnType<Task<HttpResponseMessage>>().Returns(resp);
-	    var client = new HttpClient(handler);
-        var factory = A.Fake<IHttpClientFactory>();
-        var logger = A.Fake<ILogger<PageParserManager>>();
-        A.CallTo(() => factory.CreateClient(A<string>._)).Returns(client);
-		var manager = new PageParserManager(factory, logger);
+	    var client = A.Fake<IHttpTrackerClient>();
+        A.CallTo(() => client.GetAsync(A<string>.Ignored, A<CancellationToken>.Ignored))
+	        .Returns(GetPage());
+        var logger = A.Fake<ILogger<RutrackerPageParserManager>>();
+		var manager = new RutrackerPageParserManager(logger, client);
 		var postDto = new PostDto("123", "","http://123.ru/forum/viewtopic.php?t=6257950", "", 0, null, null);
 		var resultDto = await manager.LoadDataAsync(postDto, default);
 		resultDto.Description.Should().NotBeEmpty();

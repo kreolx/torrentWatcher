@@ -1,24 +1,26 @@
 ﻿using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Contracts.Interfaces;
 using Contracts.Models;
 using Engine.Managers.Contracts;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Test.Engine")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7")]
 namespace Engine.Managers.Parsers.Rutracker;
 
-internal sealed class PageParserManager : IPageParserManager
+internal sealed class RutrackerPageParserManager : IPageParserManager
 {
     public Source Source { get; } = Source.Rutracker;
-    private readonly IHttpClientFactory  _httpClientFactory;
-    private readonly ILogger<PageParserManager> _logger;
+    private readonly IHttpTrackerClient _httpClient;
+    private readonly ILogger<RutrackerPageParserManager> _logger;
 
-    public PageParserManager(IHttpClientFactory httpClientFactory, ILogger<PageParserManager> logger)
+    public RutrackerPageParserManager(ILogger<RutrackerPageParserManager> logger, IHttpTrackerClient httpClient)
     {
-        _httpClientFactory = httpClientFactory;
         _logger = logger;
+        _httpClient = httpClient;
     }
 
     ///<inheritdoc />
@@ -28,26 +30,10 @@ internal sealed class PageParserManager : IPageParserManager
         string imageUrl = string.Empty;
         string? magnet = null;
         if (string.IsNullOrEmpty(postDto.Link)) return postDto;
-        var httpClient = _httpClientFactory.CreateClient();
-        using var request = new HttpRequestMessage(HttpMethod.Get, new Uri(postDto.Link));
-        request.Headers.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml");
-        request.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
-        request.Headers.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");
-        request.Headers.TryAddWithoutValidation("Accept-Charset", "windows-1251");
+        
         try
         {
-            using var response = await httpClient.SendAsync(request, cancellationToken);
-            response.EnsureSuccessStatusCode();
-            await using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-            await using var decompressedStream = new GZipStream(responseStream, CompressionMode.Decompress);
-            using var streamReader = new StreamReader(decompressedStream);
-            using var memoryStream = new MemoryStream();
-            await decompressedStream.CopyToAsync(memoryStream, cancellationToken);
-            var bytes = memoryStream.ToArray();
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            Encoding encoding = Encoding.GetEncoding("windows-1251");
-            string html = encoding.GetString(bytes, 0, bytes.Length);
-            
+            string html = await _httpClient.GetAsync(postDto.Link, cancellationToken);
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
             var descBody = htmlDocument.DocumentNode?.SelectSingleNode("//*[contains(text(),'Описан')]")?.NextSibling;
@@ -68,7 +54,7 @@ internal sealed class PageParserManager : IPageParserManager
         }
         catch (Exception e)
         {
-         _logger.LogError(e, e.Message);
+            _logger.LogError(e, e.Message);
         }
         postDto = postDto with
         {

@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Engine\Engine.csproj" />
       <ProjectReference Include="..\CommandApi\CommandApi.csproj" />
-      <ProjectReference Include="..\TelegramClient\TelegramClient.csproj" />
+      <ProjectReference Include="..\ExternalClients\ExternalClients.csproj" />
     </ItemGroup>
 
     <ItemGroup>

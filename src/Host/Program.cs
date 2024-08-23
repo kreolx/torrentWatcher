@@ -2,7 +2,7 @@ using CommandApi;
 using Engine;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using TelegramClient;
+using ExternalClients;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) =>

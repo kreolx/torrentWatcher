@@ -6,7 +6,7 @@ using Engine.Managers.Contracts;
 [assembly: InternalsVisibleTo("Test.Engine")]
 namespace Engine.Managers.Parsers.Rutracker;
 
-internal sealed class FeedParseManager : IFeedParserManager
+internal sealed class RutrackerFeedParseManager : IFeedParserManager
 {
     public Source Source { get; } = Source.Rutracker;
 

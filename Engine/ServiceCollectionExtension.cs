@@ -1,6 +1,7 @@
 ﻿using Contracts.Interfaces;
 using Engine.Managers;
 using Engine.Managers.Contracts;
+using Engine.Managers.Parsers.Nnmclub;
 using Engine.Managers.Parsers.Rutracker;
 using Engine.Storage.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +15,19 @@ public static class ServiceCollectionExtension
     {
         services.AddDbContext<ApplicationDbContext>(optionsAction);
         services.AddTransient<IPostManager, PostManager>();
-        services.AddTransient<IPageParserManager, PageParserManager>();
-        services.AddTransient<IFeedParserManager, FeedParseManager>();
+        
+        services.AddTransient<IPageParserManager, RutrackerPageParserManager>();
+        services.AddTransient<IFeedParserManager, RutrackerFeedParseManager>();
+
+        services.AddTransient<IFeedParserManager, NnmFeedParserManager>();
+        services.AddTransient<IPageParserManager, NnmPageParserManager>();
+        
         services.AddTransient<IFeedManager, FeedManager>();
         services.AddTransient<IMainManager, MainManager>();
         services.AddHttpClient();
 
-        services.AddHostedService<ParseHostedService>();
-        services.AddHostedService<PublishHostedService>();
+        //services.AddHostedService<ParseHostedService>();
+        //services.AddHostedService<PublishHostedService>();
         return services;
     }
 }

@@ -4,19 +4,19 @@ using System.Text.Json;
 using Contracts.Interfaces;
 using Contracts.Models;
 using Contracts.Settings;
+using ExternalClients.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TelegramClient.Models;
 
-namespace TelegramClient;
+namespace ExternalClients;
 
-internal sealed class Client : ITelegramClient
+internal sealed class TelegramClient : ITelegramClient
 {
     private readonly TelegramSettings _settings;
     private readonly IHttpClientFactory  _httpClientFactory;
-    private readonly ILogger<Client> _logger;
+    private readonly ILogger<TelegramClient> _logger;
 
-    public Client(IOptionsMonitor<TelegramSettings> settings, IHttpClientFactory httpClientFactory, ILogger<Client> logger)
+    public TelegramClient(IOptionsMonitor<TelegramSettings> settings, IHttpClientFactory httpClientFactory, ILogger<TelegramClient> logger)
     {
         _httpClientFactory = httpClientFactory;
         _logger = logger;

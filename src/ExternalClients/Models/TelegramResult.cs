@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace TelegramClient.Models;
+namespace ExternalClients.Models;
 
 public record TelegramResult
 {

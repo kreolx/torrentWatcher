@@ -71,6 +71,7 @@ internal sealed class PostManager : IPostManager
     ///<inheritdoc/>
     public async Task AddNewPostAsync(PostDto postDto, CancellationToken cancellationToken)
     {
+        if (string.IsNullOrEmpty(postDto.Magnet)) return;
         var alreadyExist = await _context.Posts.FirstOrDefaultAsync(x => x.ExternalId == postDto.ExternalId, cancellationToken);
         var description = postDto.Description?.Length > 200? postDto.Description?.Substring(0, 197) + "..." : postDto.Description;
         if (description?.StartsWith(":") ?? false)

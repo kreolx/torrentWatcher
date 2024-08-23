@@ -1,5 +1,4 @@
 ﻿using Contracts.Interfaces;
-using Contracts.Models;
 using Engine.Managers.Contracts;
 using Microsoft.Extensions.Logging;
 
@@ -11,18 +10,18 @@ internal sealed class MainManager : IMainManager
     private readonly IPostManager _postManager;
     private readonly IEnumerable<IFeedParserManager> _feedParserManagers;
     private readonly IEnumerable<IPageParserManager> _pageParsers;
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpTrackerClient _httpClient;
     private readonly ITelegramClient _telegramClient;
     private readonly ILogger<MainManager> _logger;
 
     public MainManager(IFeedManager feedManager, IPostManager postManager, IEnumerable<IFeedParserManager> feedParserManagers,
-        IEnumerable<IPageParserManager> pageParsers, IHttpClientFactory httpClientFactory, ILogger<MainManager> logger, ITelegramClient telegramClient)
+        IEnumerable<IPageParserManager> pageParsers, IHttpTrackerClient httpClient, ILogger<MainManager> logger, ITelegramClient telegramClient)
     {
         _feedManager = feedManager;
         _postManager = postManager;
         _feedParserManagers = feedParserManagers;
         _pageParsers = pageParsers;
-        _httpClientFactory = httpClientFactory;
+        _httpClient = httpClient;
         _logger = logger;
         _telegramClient = telegramClient;
     }
@@ -34,16 +33,14 @@ internal sealed class MainManager : IMainManager
         var feeds = await _feedManager.GetFeedsAsync(cancellationToken);
         foreach (var feedSetting in feeds.ToArray())
         {
-            _logger.LogInformation("Processing feed: {0}", feedSetting.Source);
-            var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync(feedSetting.Url, cancellationToken);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var feed = await response.Content.ReadAsStringAsync(cancellationToken);
+                _logger.LogInformation("Processing feed: {0}", feedSetting.Source);
+                var feed = await _httpClient.GetAsync(feedSetting.Url, cancellationToken);
                 var parser = _feedParserManagers.First(x => x.Source == feedSetting.Source);
                 var pageParser = _pageParsers.First(x => x.Source == feedSetting.Source);
                 var posts = parser.ParseFeed(feed);
-                var postsArray = posts.ToArray();
+                var postsArray = posts.ToArray().Take(5).ToArray();
                 _logger.LogInformation("Parsed {0} posts.", postsArray.Length);
                 if (posts!.Any())
                 {
@@ -53,6 +50,10 @@ internal sealed class MainManager : IMainManager
                         await _postManager.AddNewPostAsync(post, cancellationToken);
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message, e.StackTrace);
             }
         }
     }

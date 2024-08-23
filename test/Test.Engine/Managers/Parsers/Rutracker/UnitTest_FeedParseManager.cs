@@ -8,7 +8,7 @@ public class UnitTest_FeedParseManager
     [Fact]
     public void ParseFeed_should_return_array_of_posts()
     {
-        var manager = new FeedParseManager();
+        var manager = new RutrackerFeedParseManager();
         var feed = GetFeed();
         var posts = manager.ParseFeed(feed);
         posts.Should().NotBeNull();

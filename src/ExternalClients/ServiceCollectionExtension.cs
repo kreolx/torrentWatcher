@@ -3,7 +3,7 @@ using Contracts.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TelegramClient;
+namespace ExternalClients;
 
 public static class ServiceCollectionExtension
 {
@@ -12,7 +12,9 @@ public static class ServiceCollectionExtension
         var sect = configuration.GetSection(nameof(TelegramSettings));
         services.AddOptions<TelegramSettings>().Bind(sect);
         
-        services.AddTransient<ITelegramClient, Client>();
+        services.AddTransient<ITelegramClient, TelegramClient>();
+        services.AddTransient<IHttpTrackerClient, HttpTrackerClient>();
+        services.AddHttpClient();
         return services;
     }
 }

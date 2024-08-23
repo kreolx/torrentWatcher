@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "src\Host\Host.cspro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandApi", "src\CommandApi\CommandApi.csproj", "{C032312E-D3C5-4285-8841-DF629771D3D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramClient", "src\TelegramClient\TelegramClient.csproj", "{D7F93ABE-EE47-4158-9EA2-613F5AF08F39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalClients", "src\ExternalClients\ExternalClients.csproj", "{D7F93ABE-EE47-4158-9EA2-613F5AF08F39}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "artifacts", "artifacts", "{D73DEFE2-AB1E-4727-8959-D0AA7477B0CE}"
 	ProjectSection(SolutionItems) = preProject
