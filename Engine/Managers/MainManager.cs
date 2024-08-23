@@ -35,7 +35,7 @@ internal sealed class MainManager : IMainManager
         {
             try
             {
-                _logger.LogInformation("Processing feed: {0}", feedSetting.Source);
+                _logger.LogInformation("Processing feed: {0} {1}", feedSetting.Source, feedSetting.Url);
                 var feed = await _httpClient.GetAsync(feedSetting.Url, cancellationToken);
                 var parser = _feedParserManagers.First(x => x.Source == feedSetting.Source);
                 var pageParser = _pageParsers.First(x => x.Source == feedSetting.Source);
