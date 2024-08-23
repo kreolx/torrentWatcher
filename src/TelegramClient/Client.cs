@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Contracts.Interfaces;
+using Contracts.Models;
 using Contracts.Settings;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,9 +23,10 @@ internal sealed class Client : ITelegramClient
         _settings = settings.CurrentValue;
     }
 
-    public async Task<bool> SendMessageAsync(string? imageUrl, string message, CancellationToken cancellationToken)
+    public async Task<PublishResult> SendMessageAsync(string? imageUrl, string message, CancellationToken cancellationToken)
     {
         bool success = false;
+        string? errorMessage = null;
         try
         {
             var url = string.IsNullOrEmpty(imageUrl) ? $"https://api.telegram.org/bot{_settings.Token}/sendMessage?chat_id={_settings.ChatId}"
@@ -62,8 +64,9 @@ internal sealed class Client : ITelegramClient
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
+            errorMessage = e.Message;
         }
-
-        return success;
+        
+        return new PublishResult(success, errorMessage);
     }
 }

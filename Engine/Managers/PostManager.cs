@@ -48,10 +48,20 @@ internal sealed class PostManager : IPostManager
     }
 
     ///<inheritdoc/>
-    public async Task SetPublishedPostAsync(Guid id, CancellationToken cancellationToken)
+    public async Task SetPublishedPostAsync(Guid id, PublishResult result, CancellationToken cancellationToken)
     {
         var post = await _context.Posts.FirstAsync(x => x.Id == id, cancellationToken);
-        post.PublishedAt = DateTimeOffset.UtcNow;
+        if (result.Success)
+        {
+            post.PublishedAt = DateTimeOffset.UtcNow;
+            post.Status = PostStatus.Published;
+        }
+        else
+        {
+            post.Status = PostStatus.Error;
+            post.ErrorMessage = result.ErrorMessage;
+        }
+        
         await _context.SaveChangesAsync(cancellationToken);
     }
 

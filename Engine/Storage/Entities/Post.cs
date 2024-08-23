@@ -1,4 +1,6 @@
-﻿namespace Engine.Storage.Entities;
+﻿using Contracts.Models;
+
+namespace Engine.Storage.Entities;
 
 public record Post
 {
@@ -10,4 +12,6 @@ public record Post
     public long ExternalId { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
     public DateTimeOffset? PublishedAt { get; set; }
+    public PostStatus Status { get; set; }
+    public string? ErrorMessage { get; set; }
 }

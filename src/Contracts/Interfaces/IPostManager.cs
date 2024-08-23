@@ -29,6 +29,7 @@ public interface IPostManager
     /// Отмечает пост как опубликованный.
     /// </summary>
     /// <param name="id">Идентификатор поста.</param>
+    /// <param name="result"></param>
     /// <param name="cancellationToken">Асинхронный токен отмены.</param>
-    Task SetPublishedPostAsync(Guid id, CancellationToken cancellationToken);
+    Task SetPublishedPostAsync(Guid id, PublishResult result, CancellationToken cancellationToken);
 }

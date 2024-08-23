@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Contracts.Interfaces;
+﻿using Contracts.Interfaces;
 using Contracts.Models;
 using Engine.Managers.Contracts;
 using Microsoft.Extensions.Logging;
@@ -44,7 +43,7 @@ internal sealed class MainManager : IMainManager
                 var parser = _feedParserManagers.First(x => x.Source == feedSetting.Source);
                 var pageParser = _pageParsers.First(x => x.Source == feedSetting.Source);
                 var posts = parser.ParseFeed(feed);
-                var postsArray = posts.ToArray();
+                var postsArray = posts.ToArray().Take(2).ToArray();
                 _logger.LogInformation("Parsed {0} posts.", postsArray.Length);
                 var fullPost = new PostDto[postsArray.Length];
                 if (posts!.Any())
@@ -74,10 +73,9 @@ internal sealed class MainManager : IMainManager
             var postDto = await _postManager.GetNotPublishedPostAsync(cancellationToken);
             if (postDto is not null)
             {
-                if (await _telegramClient.SendMessageAsync(postDto.ImageUrl, postDto.ToString(), cancellationToken))
-                {
-                    await _postManager.SetPublishedPostAsync(postDto.Id, cancellationToken);
-                }
+                var result =
+                    await _telegramClient.SendMessageAsync(postDto.ImageUrl, postDto.ToString(), cancellationToken);
+                await _postManager.SetPublishedPostAsync(postDto.Id, result, cancellationToken);
             }
             else
             {
