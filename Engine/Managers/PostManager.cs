@@ -22,8 +22,9 @@ internal sealed class PostManager : IPostManager
         var posts = new List<Post>();
         for (var i = 0; i < postsDtoArray.Length; i++)
         {
-            var alreadyExist = await _context.Posts.AnyAsync(x => x.ExternalId == postsDtoArray[i].ExternalId, cancellationToken);
-            var description = postsDtoArray[i].Description?.Length > 200? postsDtoArray[i].Description?.Substring(0, 197) + "..." : postsDtoArray[i].Description;
+            var postDto = postsDtoArray[i];
+            var alreadyExist = await _context.Posts.AnyAsync(x => x.ExternalId == postDto.ExternalId, cancellationToken);
+            var description = postDto.Description?.Length > 200? postDto.Description?.Substring(0, 197) + "..." : postDto.Description;
             if (description?.StartsWith(":") ?? false)
             {
                 description = description.Remove(0, 1);
@@ -33,12 +34,14 @@ internal sealed class PostManager : IPostManager
                 var newPost = new Post
                 {
                     Id = Guid.NewGuid(),
-                    Title = postsDtoArray[i].Title,
+                    Title = postDto.Title,
                     Description = description,
-                    Link = postsDtoArray[i].Link,
-                    ImageUrl = postsDtoArray[i].ImageUrl,
+                    Link = postDto.Link,
+                    ImageUrl = postDto.ImageUrl,
                     CreatedAt = DateTimeOffset.UtcNow,
-                    ExternalId = postsDtoArray[i].ExternalId,
+                    ExternalId = postDto.ExternalId,
+                    Tag = postDto.Tag,
+                    Magnit = postDto.Magnet,
                 };
                 posts.Add(newPost);
             }
@@ -68,17 +71,36 @@ internal sealed class PostManager : IPostManager
     ///<inheritdoc/>
     public async Task AddNewPostAsync(PostDto postDto, CancellationToken cancellationToken)
     {
-        var post = new Post
+        var alreadyExist = await _context.Posts.FirstOrDefaultAsync(x => x.ExternalId == postDto.ExternalId, cancellationToken);
+        var description = postDto.Description?.Length > 200? postDto.Description?.Substring(0, 197) + "..." : postDto.Description;
+        if (description?.StartsWith(":") ?? false)
         {
-            Id = Guid.NewGuid(),
-            Title = postDto.Title,
-            Description = postDto.Description,
-            Link = postDto.Link,
-            ImageUrl = postDto.ImageUrl,
-            CreatedAt = DateTimeOffset.UtcNow,
-            ExternalId = postDto.ExternalId,
-        };
-        await _context.Posts.AddAsync(post, cancellationToken);
+            description = description.Remove(0, 1);
+        }
+        if (alreadyExist is null)
+        {
+            var newPost = new Post
+            {
+                Id = Guid.NewGuid(),
+                Title = postDto.Title,
+                Description = description,
+                Link = postDto.Link,
+                ImageUrl = postDto.ImageUrl,
+                CreatedAt = DateTimeOffset.UtcNow,
+                ExternalId = postDto.ExternalId,
+                Tag = postDto.Tag,
+                Magnit = postDto.Magnet,
+            };
+            await _context.Posts.AddAsync(newPost, cancellationToken);
+        }
+        else
+        {
+            alreadyExist.Status = PostStatus.New;
+            alreadyExist.PublishedAt = null;
+            alreadyExist.ImageUrl = postDto.ImageUrl;
+            alreadyExist.Link = postDto.Link;
+            alreadyExist.Title = postDto.Title;
+        }
         await _context.SaveChangesAsync(cancellationToken);
     }
 
@@ -86,9 +108,9 @@ internal sealed class PostManager : IPostManager
     public async Task<NotPublishedPost?> GetNotPublishedPostAsync(CancellationToken cancellationToken)
     {
         var post = await _context.Posts
-            .Where(p => p.PublishedAt == null)
+            .Where(p => p.Status == PostStatus.New)
             .OrderBy(p => p.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken);
-        return post is null ? null : new NotPublishedPost(post.Id, post.Title, post.Description, post.ImageUrl, post.Link);
+        return post is null ? null : new NotPublishedPost(post.Id, post.Title, post.Description, post.ImageUrl, post.Link, post.Tag, post.Magnit);
     }
 }

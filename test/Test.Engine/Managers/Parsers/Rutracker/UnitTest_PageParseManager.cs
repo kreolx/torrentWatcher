@@ -22,7 +22,7 @@ public class UnitTest_PageParseManager
         var logger = A.Fake<ILogger<PageParserManager>>();
         A.CallTo(() => factory.CreateClient(A<string>._)).Returns(client);
 		var manager = new PageParserManager(factory, logger);
-		var postDto = new PostDto("123", "","http://123.ru/forum/viewtopic.php?t=6257950", "", 0);
+		var postDto = new PostDto("123", "","http://123.ru/forum/viewtopic.php?t=6257950", "", 0, null, null);
 		var resultDto = await manager.LoadDataAsync(postDto, default);
 		resultDto.Description.Should().NotBeEmpty();
 		resultDto.Description.Should().StartWith(": журнал");

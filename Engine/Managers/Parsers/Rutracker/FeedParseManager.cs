@@ -30,7 +30,9 @@ internal sealed class FeedParseManager : IFeedParserManager
             var title = nodes.FirstOrDefault(x => x.Name == "title")?.InnerText;
             var link = nodes.FirstOrDefault(x => x.Name == "link")?.Attributes["href"]?.Value;
             var externalId = Int64.Parse(link.Split("=")[^1]);
-            posts[i] = new PostDto(title, "", link, "", externalId);
+            var category = nodes.FirstOrDefault(x => x.Name == "category")?.Attributes["label"]?.Value;
+            
+            posts[i] = new PostDto(title, null, link, null, externalId, category, null);
         }
         return posts;
     }

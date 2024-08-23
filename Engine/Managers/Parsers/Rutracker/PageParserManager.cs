@@ -26,6 +26,7 @@ internal sealed class PageParserManager : IPageParserManager
     {
         string description = string.Empty;
         string imageUrl = string.Empty;
+        string? magnet = null;
         if (string.IsNullOrEmpty(postDto.Link)) return postDto;
         var httpClient = _httpClientFactory.CreateClient();
         using var request = new HttpRequestMessage(HttpMethod.Get, new Uri(postDto.Link));
@@ -51,6 +52,7 @@ internal sealed class PageParserManager : IPageParserManager
             htmlDocument.LoadHtml(html);
             var descBody = htmlDocument.DocumentNode?.SelectSingleNode("//*[contains(text(),'Описан')]")?.NextSibling;
             description = HtmlEntity.DeEntitize(descBody?.InnerText);
+            magnet = htmlDocument.DocumentNode?.SelectSingleNode("//*[contains(@class,'magnet-link')]")?.Attributes["href"].Value;
             var imageNodes = htmlDocument.DocumentNode?.SelectNodes("//*[contains(@class, 'postImg')]");
             if (imageNodes?.Count > 0)
             {
@@ -71,7 +73,8 @@ internal sealed class PageParserManager : IPageParserManager
         postDto = postDto with
         {
             Description = description,
-            ImageUrl = imageUrl
+            ImageUrl = imageUrl,
+            Magnet = magnet
         };
         return postDto;
     }

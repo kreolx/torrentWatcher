@@ -43,21 +43,15 @@ internal sealed class MainManager : IMainManager
                 var parser = _feedParserManagers.First(x => x.Source == feedSetting.Source);
                 var pageParser = _pageParsers.First(x => x.Source == feedSetting.Source);
                 var posts = parser.ParseFeed(feed);
-                var postsArray = posts.ToArray().Take(2).ToArray();
+                var postsArray = posts.ToArray().Take(5).ToArray();
                 _logger.LogInformation("Parsed {0} posts.", postsArray.Length);
-                var fullPost = new PostDto[postsArray.Length];
                 if (posts!.Any())
                 {
                     for (int i = 0; i < postsArray.Length; i++)
                     {
                         var post = await pageParser.LoadDataAsync(postsArray[i], cancellationToken);
-                        fullPost[i] = post;
+                        await _postManager.AddNewPostAsync(post, cancellationToken);
                     }
-                }
-
-                if (fullPost.Any())
-                {
-                    await _postManager.AddRangePostsAsync(fullPost, cancellationToken);
                 }
             }
         }
