@@ -29,7 +29,7 @@ internal sealed class NnmFeedParserManager : IFeedParserManager
             var link = nodes.FirstOrDefault(x => x.Name == "link")?.InnerText;
             var id = link.Split("=")[^1].Split("#")[0];
             var externalId = Int64.Parse(id);
-            var category = String.Concat(", ", nodes.Where(x => x.Name == "category")?.Select(x => x.InnerText));
+            var category = String.Join(", ", nodes.Where(x => x.Name == "category")?.Select(x => x.InnerText));
             posts[i] = new PostDto(title, null, link, null, externalId, category, null);
         }
         return posts;
