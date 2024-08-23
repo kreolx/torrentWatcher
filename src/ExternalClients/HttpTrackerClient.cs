@@ -10,13 +10,15 @@ public class HttpTrackerClient : IHttpTrackerClient
     private readonly IHttpClientFactory  _httpClientFactory;
     private readonly ILogger<HttpTrackerClient> _logger;
 
-    public HttpTrackerClient(IHttpClientFactory httpClientFactory)
+    public HttpTrackerClient(IHttpClientFactory httpClientFactory, ILogger<HttpTrackerClient> logger)
     {
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
 
     public async Task<string> GetAsync(string url, CancellationToken cancellationToken)
     {
+        if (string.IsNullOrEmpty(url)) throw new ArgumentNullException(nameof(url));
         var httpClient = _httpClientFactory.CreateClient();
         using var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
         request.Headers.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml");
