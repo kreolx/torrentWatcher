@@ -20,8 +20,8 @@ public static class ServiceCollectionExtension
         services.AddTransient<IMainManager, MainManager>();
         services.AddHttpClient();
 
-        //services.AddHostedService<ParseHostedService>();
-        //services.AddHostedService<PublishHostedService>();
+        services.AddHostedService<ParseHostedService>();
+        services.AddHostedService<PublishHostedService>();
         return services;
     }
 }
