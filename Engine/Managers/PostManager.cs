@@ -93,6 +93,10 @@ internal sealed class PostManager : IPostManager
             };
             await _context.Posts.AddAsync(newPost, cancellationToken);
         }
+        else if (alreadyExist.PublishedAt.HasValue && DateTimeOffset.UtcNow.AddDays(1) > alreadyExist.PublishedAt.Value)
+        {
+            return;
+        }
         else
         {
             alreadyExist.Status = PostStatus.New;
