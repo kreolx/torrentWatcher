@@ -19,10 +19,12 @@ internal sealed class PuppeterClient : IHttpTrackerClient
         await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
         {
             Headless = true,
-            Args = new[] { "--no-sandbox" }
+            Args = new[] { "--no-sandbox" },
+            SlowMo = 10,
         });
-        var page = await browser.NewPageAsync();
-        var response = await page.GoToAsync(url, WaitUntilNavigation.DOMContentLoaded);
+        await using var page = await browser.NewPageAsync();
+        await page.SetJavaScriptEnabledAsync(true);
+        var response = await page.GoToAsync(url, WaitUntilNavigation.Networkidle2);
         html = await response.TextAsync();
         _logger.LogInformation(html);
         return html;
