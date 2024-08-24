@@ -13,7 +13,8 @@ public static class ServiceCollectionExtension
         services.AddOptions<TelegramSettings>().Bind(sect);
         
         services.AddTransient<ITelegramClient, TelegramClient>();
-        services.AddTransient<IHttpTrackerClient, HttpTrackerClient>();
+        //services.AddTransient<IHttpTrackerClient, HttpTrackerClient>();
+        services.AddTransient<IHttpTrackerClient, PuppeterClient>();
         services.AddHttpClient();
         return services;
     }
