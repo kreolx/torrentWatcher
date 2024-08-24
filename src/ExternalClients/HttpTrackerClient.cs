@@ -21,9 +21,10 @@ public class HttpTrackerClient : IHttpTrackerClient
         if (string.IsNullOrEmpty(url)) throw new ArgumentNullException(nameof(url));
         var httpClient = _httpClientFactory.CreateClient();
         using var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
-        request.Headers.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml");
-        request.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
-        request.Headers.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");
+        request.Headers.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+        request.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate, br, zstd");
+        request.Headers.TryAddWithoutValidation("Accept-Language", "ru,en;q=0.9");
+        request.Headers.TryAddWithoutValidation("User-Agent", "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 YaBrowser/24.7.0.0 Safari/537.36");
         request.Headers.TryAddWithoutValidation("Accept-Charset", "windows-1251");
 
         try

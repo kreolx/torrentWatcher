@@ -12,4 +12,4 @@ jobs:
       - name: Delete old containers
         run: docker rm -f torrentwatcher || true
       - name: Deploy
-        run: docker run --name=torrentwatcher --detach --restart=always --network=database --env "TelegramSettings__Token"=${{secrets.TOKEN}} --env "TelegramSettings__ChatId"=${{secrets.CHAT_ID}} --env "ConnectionStrings__postgresConnection"=${{secrets.CONNECTION_STRING}} torrentwatcher:latest
+        run: docker run --name=torrentwatcher --publish 8080:8080 --detach --restart=always --network=database --env "TelegramSettings__Token"=${{secrets.TOKEN}} --env "TelegramSettings__ChatId"=${{secrets.CHAT_ID}} --env "ConnectionStrings__postgresConnection"=${{secrets.CONNECTION_STRING}} torrentwatcher:latest

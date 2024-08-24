@@ -2,5 +2,5 @@
 
 public interface IHttpTrackerClient
 {
-    Task<string> GetAsync(string url, CancellationToken cancellationToken);
+    Task<string?> GetAsync(string url, CancellationToken cancellationToken);
 }
